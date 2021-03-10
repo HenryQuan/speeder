@@ -2,37 +2,29 @@
 #include <substrate.h>
 #include <Foundation/Foundation.h>
 
-float speed = 0.1;
+float speed = 0.5;
+static struct timeval *base = NULL;
 
 static int (*orig_gettimeofday)(struct timeval *tv, struct timezone *tz);
 static int new_gettimeofday(struct timeval *tv, struct timezone *tz) {
-	NSLog(@"Speeder: new function");
-	int error = orig_gettimeofday(tv, tz);
-	NSLog(@"Speeder: called old function");
+	int val = orig_gettimeofday(tv, tz);
 	// 0 -> success, -1 -> failure
-	if (error == 0 && tv != NULL) {
-		NSLog(@"Speeder: success");
-		tv->tv_sec *= speed;
-		tv->tv_usec *= speed;
-	} else {
-		NSLog(@"Speeder: failure");
-		tv->tv_sec *= speed;
-		tv->tv_usec *= speed;
+	if (val == 0 && tv != NULL) {
+		// setup the base time
+		if (base == NULL) {
+			base = malloc(sizeof(struct timeval));
+			*base = *tv;
+			return val;
+		}
+		
+		// time = base + (current - base) * speed
+		long int diff = (tv->tv_sec - base->tv_sec) * speed;
+		tv->tv_sec = base->tv_sec + diff;
 	}
 
-	return error;
+	return val;
 }
 
 %ctor {
-	MSImageRef libc = MSGetImageByName("libstdc++.dylib");
-	NSLog(@"Speeder: Getting image ref");
-	if (libc != NULL) {
-		NSLog(@"Speeder: image ref is all goo");
-		MSHookFunction((void *)MSFindSymbol(NULL, "_gettimeofday"), (void *)new_gettimeofday, (void **)orig_gettimeofday);
-		NSLog(@"Speeder: hook completed");
-	}
-
-	NSLog(@"Speeder: try hook");
 	MSHookFunction((void *)MSFindSymbol(NULL, "_gettimeofday"), (void *)new_gettimeofday, (void **)&orig_gettimeofday);
-	NSLog(@"Speeder: hook done");
 }

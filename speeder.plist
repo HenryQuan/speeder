@@ -1,1 +1,8 @@
-{ Filter = { Bundles = ( "jp.gungho.padChallenge", "com.savysoda.eenies" ); }; }
+{
+    Filter =     {
+        Bundles =         (
+            "jp.gungho.padChallenge",
+            "com.miHoYo.GenshinImpact"
+        );
+    };
+}
