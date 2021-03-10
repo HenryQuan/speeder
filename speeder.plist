@@ -1,8 +1,7 @@
 {
     Filter =     {
         Bundles =         (
-            "jp.gungho.padChallenge",
-            "com.miHoYo.GenshinImpact"
+            "jp.gungho.padChallenge"
         );
     };
 }
