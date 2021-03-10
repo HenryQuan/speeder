@@ -1,0 +1,9 @@
+Package: com.yourcompany.speeder
+Name: speeder
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: HenryQuan
+Author: HenryQuan
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000)
