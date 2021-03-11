@@ -1,13 +1,12 @@
 #include <sys/time.h>
 #include <substrate.h>
-#include <Foundation/Foundation.h>
 
 float speed = 0.5;
 static struct timeval *base = NULL;
 
-static int (*orig_gettimeofday)(struct timeval *tv, struct timezone *tz);
+static int (*_gettimeofday)(struct timeval *, struct timezone *);
 static int new_gettimeofday(struct timeval *tv, struct timezone *tz) {
-	int val = orig_gettimeofday(tv, tz);
+	int val = _gettimeofday(tv, tz);
 	// 0 -> success, -1 -> failure
 	if (val == 0 && tv != NULL) {
 		// setup the base time
@@ -26,5 +25,5 @@ static int new_gettimeofday(struct timeval *tv, struct timezone *tz) {
 }
 
 %ctor {
-	MSHookFunction((void *)MSFindSymbol(NULL, "_gettimeofday"), (void *)new_gettimeofday, (void **)&orig_gettimeofday);
+	MSHookFunction((void *)MSFindSymbol(NULL, "_gettimeofday"), (void *)new_gettimeofday, (void **)&_gettimeofday);
 }

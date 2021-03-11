@@ -1,8 +1,8 @@
-Package: com.yourcompany.speeder
+Package: org.github.henryquan.speeder
 Name: speeder
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: Control the speed and time of apps and games
 Maintainer: HenryQuan
 Author: HenryQuan
 Section: Tweaks
