@@ -5,13 +5,13 @@ static struct timeval *base = NULL;
 
 static int (*_gettimeofday)(struct timeval *, struct timezone *);
 static int new_gettimeofday(struct timeval *tv, struct timezone *tz) {
-	LOG("in new get time of day");
+	debug_print("in new get time of day");
 	int val = _gettimeofday(tv, tz);
-	LOG("called original");
+	debug_print("called original");
 
 	// 0 -> success, -1 -> failure
 	if (val == 0 && tv != NULL) {
-		LOG("updating time");
+		debug_print("updating time");
 
 		// setup the base time
 		if (base == NULL) {
@@ -29,7 +29,8 @@ static int new_gettimeofday(struct timeval *tv, struct timezone *tz) {
 }
 
 %ctor {
-	LOG("before hooking");
+	NSLog(@"Hooked, speeder");
+	debug_print("before hooking");
 	MSHookFunction((void *)MSFindSymbol(NULL, "_gettimeofday"), (void *)new_gettimeofday, (void **)&_gettimeofday);
-	LOG("after hooking");
+	debug_print("after hooking");
 }

@@ -3,4 +3,4 @@
 #include <substrate.h>
 #include <Foundation/Foundation.h>
 
-#define LOG(x) NSLog(@"speeder: x")
+#define debug_print(x) NSLog(@"speeder: x")
