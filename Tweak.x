@@ -21,8 +21,11 @@ static int new_gettimeofday(struct timeval *tv, struct timezone *tz) {
 		}
 		
 		// time = base + (current - base) * speed
-		long int diff = (tv->tv_sec - base->tv_sec) * speed;
-		tv->tv_sec = base->tv_sec + diff;
+		long int diffSec = (tv->tv_sec - base->tv_sec) * speed;
+		long int diffUsec = (tv->tv_usec - base->tv_usec) * speed;
+		tv->tv_sec = base->tv_sec + diffSec;
+		// it is necessary to update usec to make it very smoother
+		tv->tv_usec = base->tv_usec + diffUsec;
 	}
 
 	return val;
